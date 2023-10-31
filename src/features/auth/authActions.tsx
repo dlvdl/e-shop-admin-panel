@@ -39,3 +39,24 @@ export const login = createAsyncThunk<
     }
   }
 })
+
+export const logout = createAsyncThunk<
+  Response,
+  { email: string; password: string } & Partial<Payload>,
+  {
+    rejectValue: string
+  }
+>("auth/logout", async (userData, { rejectWithValue }) => {
+  try {
+    const response = await axiosClient.post("logout", {})
+    return response.data
+  } catch (error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.data.message
+    ) {
+      return rejectWithValue(error.response.data.message)
+    }
+  }
+})

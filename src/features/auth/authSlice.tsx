@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { login } from "./authActions"
+import { login, logout } from "./authActions"
 import { User } from "./authActions"
 
 interface AuthState {
@@ -47,23 +47,21 @@ const authSlice = createSlice({
         state.loading = false
         state.errorMessage = payload
       })
+      .addCase(logout.pending, (state) => {
+        state.loading = true
+        state.errorMessage = undefined
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.loading = false
+        state.user = null
+        state.token = null
+      })
+      .addCase(logout.rejected, (state, { payload }) => {
+        console.log(payload)
+        state.loading = false
+        state.errorMessage = payload
+      })
   },
-
-  // extraReducers: {
-  //   [login.pending]: (state: AuthState) => {
-  //     state.loading = true
-  //     state.error = null
-  //   },
-  //   [login.fulfilled]: (state: AuthState, { user, token }: Credentials) => {
-  //     state.loading = false
-  //     state.user = user
-  //     state.token = token
-  //   },
-  //   [login.rejected]: (state: AuthState, payload: Error | AxiosError) => {
-  //     state.loading = false
-  //     state.error = payload
-  //   },
-  // },
 })
 
 export const { setCredentials, logOut } = authSlice.actions
