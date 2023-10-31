@@ -12,7 +12,6 @@ const DefaultLayout: FunctionComponent<Props> = () => {
 
   return (
     <div>
-      <h1>Default layout</h1>
       <Outlet />
     </div>
   )

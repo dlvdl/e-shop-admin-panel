@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react"
-import { useAppSelector } from "../app/hooks"
+// import { useAppSelector } from "../app/hooks"
 import Sidebar from "../components/SideBar"
 import { Outlet } from "react-router-dom"
 
@@ -7,7 +7,7 @@ interface Props {}
 
 const Dashboard: FunctionComponent<Props> = () => {
   const [showSidebar, setShowSidebar] = useState(false)
-  const user = useAppSelector((state) => state.auth.user)
+  // const user = useAppSelector((state) => state.auth.user)
 
   return (
     <div className="flex w-full h-screen flex-row">
@@ -20,9 +20,9 @@ const Dashboard: FunctionComponent<Props> = () => {
         </div>
       )}
 
-      <div className="flex w-full flex-col h-full max-h-screen overflow-scroll">
-        <header className="flex justify-between p-8 border-b-2 relative">
-          <div className="flex gap-6 items-center">
+      <div className="flex w-full flex-col h-full max-h-screen overflow-scroll font-lato">
+        <header className="flex justify-between p-8 relative">
+          <div className="flex gap-6 items-center text-white">
             <button
               className="sm:hidden"
               onClick={() => {
@@ -31,11 +31,10 @@ const Dashboard: FunctionComponent<Props> = () => {
             >
               hh
             </button>
-            <p>Header Info</p>
+            <p className="font-bold text-[22px]">Dashboard</p>
           </div>
-          <div className="flex gap-6 items-center">
-            <p>{user}</p>
-            <button>Sign out</button>
+          <div className="flex gap-6 items-center text-white">
+            {/* <p>{user}</p> */}
           </div>
         </header>
         <main className="px-8 py-3">
