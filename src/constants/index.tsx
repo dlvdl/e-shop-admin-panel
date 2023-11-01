@@ -1,4 +1,4 @@
-import { DashBoardLogo, Customer, Logout } from "../assets"
+import { DashBoardLogo, Customer, Logout, Shop } from "../assets"
 
 export type Navlinks = Array<{ text: string; icon: string; to: string }>
 
@@ -6,12 +6,17 @@ export const UpperNavlinks: Navlinks = [
   {
     text: "Dashboard",
     icon: DashBoardLogo,
-    to: "/Dashboard",
+    to: "/dashboard",
   },
   {
     text: "Customer",
     icon: Customer,
-    to: "/Customer",
+    to: "/customer",
+  },
+  {
+    text: "Products",
+    icon: Shop,
+    to: "/products",
   },
 ]
 
