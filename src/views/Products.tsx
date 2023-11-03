@@ -1,20 +1,34 @@
-import { FunctionComponent } from "react"
+import { FunctionComponent, useState } from "react"
 import { Order, Actions, Add } from "../assets"
+import Modal from "../components/Modal"
+import ProductForm from "../components/ProductForm"
 
 interface Props {}
 
 const Products: FunctionComponent<Props> = () => {
+  const [openModal, setOpenModal] = useState(false)
   return (
     <div>
       <div className="mb-4 flex justify-between">
         <h2 className="text-white font-bold text-2xl">Products</h2>
         <button
           type="button"
+          onClick={() => {
+            setOpenModal(!openModal)
+          }}
           className="flex items-center rounded-full justify-center aspect-square bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           <img src={Add} alt="#" />
         </button>
       </div>
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(!openModal)
+        }}
+      >
+        <ProductForm />
+      </Modal>
       <div className="bg-custom-black-200 p-4 rounded-2xl">
         <div className="flex justify-between mb-4 text-white ">
           <div className="flex items-center gap-4">
