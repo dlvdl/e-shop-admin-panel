@@ -13,7 +13,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
+    token: "fdf",
     errorMessage: undefined,
     loading: false,
   } as AuthState,

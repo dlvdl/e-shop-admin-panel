@@ -1,12 +1,14 @@
-import DashBoardLogo from "../assets/Vector.svg"
-import Customer from "../assets/customer.svg"
-import Shape from "../assets/shape.svg"
-import Logo from "../assets/main_logo.svg"
-import Logout from "../assets/logout.svg"
-import Shop from "../assets/shop.svg"
-import Order from "../assets/ascending-sort-svgrepo-com.svg"
-import Actions from "../assets/action.svg"
-import Add from "../assets/add-plus-svgrepo-com.svg"
+import DashBoardLogo from "./Vector.svg"
+import Customer from "./customer.svg"
+import Shape from "./shape.svg"
+import Logo from "./main_logo.svg"
+import Logout from "./logout.svg"
+import Shop from "./shop.svg"
+import Order from "./ascending-sort-svgrepo-com.svg"
+import Actions from "./action.svg"
+import Add from "./add-plus-svgrepo-com.svg"
+import IphoneMock from "./img_0_60_8644_0_1_637880419073544884.jpg"
+import Iphone15Mock from "./iphone15.jpg"
 
 export {
   DashBoardLogo,
@@ -18,4 +20,6 @@ export {
   Order,
   Actions,
   Add,
+  IphoneMock,
+  Iphone15Mock,
 }
