@@ -9,6 +9,8 @@ import Actions from "./action.svg"
 import Add from "./add-plus-svgrepo-com.svg"
 import IphoneMock from "./img_0_60_8644_0_1_637880419073544884.jpg"
 import Iphone15Mock from "./iphone15.jpg"
+import Edit from "./edit-svgrepo-com.svg"
+import Delete from "./delete-2-svgrepo-com.svg"
 
 export {
   DashBoardLogo,
@@ -22,4 +24,6 @@ export {
   Add,
   IphoneMock,
   Iphone15Mock,
+  Edit,
+  Delete,
 }
