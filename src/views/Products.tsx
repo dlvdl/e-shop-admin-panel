@@ -2,8 +2,9 @@ import { FunctionComponent, useState } from "react"
 import { Order, Actions, Add } from "../assets"
 import Modal from "../components/Modal"
 import ProductForm from "../components/ProductForm"
-import { IphoneMock, Iphone15Mock, Delete, Edit } from "../assets"
-import { Popover } from "@headlessui/react"
+import { IphoneMock, Iphone15Mock } from "../assets"
+import { CustomPopover } from "../components/Popover"
+import { ProductPopOverItems } from "../constants"
 
 interface Props {}
 
@@ -158,34 +159,13 @@ const TableItem: FunctionComponent<TableItemProps> = ({
       <td></td>
       <td className="lastUpdated">{lastUpdated}</td>
       <td className="actions">
-        <MyPopover />
+        <CustomPopover
+          icon={Actions}
+          productPopoverItems={ProductPopOverItems}
+          title={null}
+        />
       </td>
     </tr>
-  )
-}
-
-function MyPopover() {
-  return (
-    <Popover className="relative">
-      <Popover.Button className="border-0 outline-none flex items-center hover:bg-custom-blue-100 px-3 py-4  rounded-xl gap-3 transition-all">
-        <img src={Actions} alt="actions-button" />
-      </Popover.Button>
-
-      <Popover.Panel className="absolute z-10">
-        <div className="grid bg-custom-black-100 p-4 rounded-md gap-4">
-          <button className="flex justify-between gap-3 hover:bg-custom-blue-100 transition-all p-2 rounded-xl">
-            Edit
-            <img className="w-5 h-5" src={Edit} alt="edit" />
-          </button>
-          <button className="flex justify-between gap-3 hover:bg-custom-blue-100 transition-all p-2 rounded-xl">
-            Delete
-            <img className="w-5 h-5" src={Delete} alt="delete" />
-          </button>
-        </div>
-
-        <img src="/solutions.jpg" alt="" />
-      </Popover.Panel>
-    </Popover>
   )
 }
 

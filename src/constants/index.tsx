@@ -1,4 +1,5 @@
-import { DashBoardLogo, Customer, Logout, Shop } from "../assets"
+import { DashBoardLogo, Customer, Logout, Shop, Edit, Delete } from "../assets"
+import { ProductPopoverItems } from "../components/Popover"
 
 export type Navlinks = Array<{ text: string; icon: string; to: string }>
 
@@ -26,4 +27,9 @@ export const BottomNavlinks: Navlinks = [
     icon: Logout,
     to: "/logout",
   },
+]
+
+export const ProductPopOverItems: ProductPopoverItems = [
+  { title: "Edit", icon: Edit, action: () => {} },
+  { title: "Delete", icon: Delete, action: () => {} },
 ]
