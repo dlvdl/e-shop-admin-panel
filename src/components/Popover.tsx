@@ -1,9 +1,12 @@
 import { Popover } from "@headlessui/react"
 import { FunctionComponent } from "react"
+import { useAppDispatch } from "../app/hooks"
+import { setOpenModal } from "../features/ui/uiSlice"
 
 export type ProductPopoverItems = Array<{
   title: string
   icon: string
+  type: "update" | "delete"
   action: () => void
 }>
 
@@ -17,11 +20,19 @@ interface CustomdPopoverItemProps {
   icon: string
   title: string
   action: () => void
+  type: "update" | "delete"
 }
 
 const render = (data: ProductPopoverItems) => {
-  return data.map(({ action, icon, title }) => {
-    return <CustomPopoverItem action={action} icon={icon} title={title} />
+  return data.map(({ action, icon, title, type }) => {
+    return (
+      <CustomPopoverItem
+        action={action}
+        icon={icon}
+        title={title}
+        type={type}
+      />
+    )
   })
 }
 
@@ -48,13 +59,21 @@ export const CustomPopover: FunctionComponent<CustomPopoverProps> = ({
 }
 
 const CustomPopoverItem: FunctionComponent<CustomdPopoverItemProps> = ({
+  type,
   title,
   icon,
   action,
 }) => {
+  const dispatch = useAppDispatch()
   return (
     <button
-      onClick={action}
+      onClick={
+        type === "update"
+          ? () => {
+              dispatch(setOpenModal())
+            }
+          : action
+      }
       className="flex items-center justify-between gap-3 hover:bg-custom-blue-100 transition-all p-2 rounded-xl"
     >
       {title}

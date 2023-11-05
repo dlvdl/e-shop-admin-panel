@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import type { RootState } from "../../app/store"
 
 interface InitialState {
   openModal: boolean
@@ -19,4 +20,4 @@ export const uiSlice = createSlice({
 export const { setOpenModal } = uiSlice.actions
 export default uiSlice.reducer
 
-export const selectOpenModal = (state: InitialState) => state.openModal
+export const selectOpenModal = (state: RootState) => state.ui.openModal

@@ -30,6 +30,12 @@ export const BottomNavlinks: Navlinks = [
 ]
 
 export const ProductPopOverItems: ProductPopoverItems = [
-  { title: "Edit", icon: Edit, action: () => {} },
-  { title: "Delete", icon: Delete, action: () => {} },
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  {
+    title: "Edit",
+    icon: Edit,
+    type: "update",
+    action: () => {},
+  },
+  { title: "Delete", icon: Delete, type: "delete", action: () => {} },
 ]

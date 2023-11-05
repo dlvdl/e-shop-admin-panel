@@ -1,12 +1,14 @@
 import React, { FunctionComponent, useState } from "react"
+import { useCreateProductMutation } from "../features/api/apiSlice"
 
 interface Props {}
 
-interface FormData {
+export interface FormData {
   title: string | ""
   price: string | ""
   description: string | ""
   file: string | ""
+  published: boolean
 }
 
 const ProductForm: FunctionComponent<Props> = () => {
@@ -15,7 +17,22 @@ const ProductForm: FunctionComponent<Props> = () => {
     price: "",
     description: "",
     file: "",
+    published: false,
   })
+
+  const [createProduct] = useCreateProductMutation()
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    // for test purpose
+
+    e.preventDefault()
+
+    try {
+      createProduct(formData)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleTitleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, title: e.target.value })
@@ -36,7 +53,13 @@ const ProductForm: FunctionComponent<Props> = () => {
   }
 
   const handleClearButtonClick = () => {
-    setFormData({ title: "", description: "", price: "", file: "" })
+    setFormData({
+      title: "",
+      description: "",
+      price: "",
+      file: "",
+      published: false,
+    })
   }
 
   return (
@@ -47,7 +70,12 @@ const ProductForm: FunctionComponent<Props> = () => {
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          action="#"
+          method="POST"
+        >
           <div>
             <label
               htmlFor="title"
