@@ -11,6 +11,7 @@ import IphoneMock from "./img_0_60_8644_0_1_637880419073544884.jpg"
 import Iphone15Mock from "./iphone15.jpg"
 import Edit from "./edit-svgrepo-com.svg"
 import Delete from "./delete-2-svgrepo-com.svg"
+import Spinner from "./spinner.svg"
 
 export {
   DashBoardLogo,
@@ -26,4 +27,5 @@ export {
   Iphone15Mock,
   Edit,
   Delete,
+  Spinner,
 }

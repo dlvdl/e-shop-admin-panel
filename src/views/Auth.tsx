@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { useLoginMutation } from "../features/api/apiSlice"
 import { AppDispatch } from "../app/store"
 import { setCredentials } from "../features/auth/authSlice"
+import LoadingSpinner from "../components/Spinner"
 
 interface Props {
   title: string
@@ -14,7 +15,7 @@ const Auth: FunctionComponent<Props> = ({ title, type }) => {
   const emailRef = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState("")
   const [pwd, setPwd] = useState("")
-  const [login] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
 
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -136,6 +137,11 @@ const Auth: FunctionComponent<Props> = ({ title, type }) => {
           </div>
         </form>
       </div>
+      {isLoading && (
+        <div className="flex justify-center mt-10">
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   )
 }
