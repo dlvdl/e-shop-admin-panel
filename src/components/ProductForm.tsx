@@ -3,20 +3,20 @@ import { useCreateProductMutation } from "../features/api/apiSlice"
 
 interface Props {}
 
-export interface FormData {
+export interface FormDataInterface {
   title: string | ""
   price: string | ""
   description: string | ""
-  file: string | ""
+  file: File | null
   published: boolean
 }
 
 const ProductForm: FunctionComponent<Props> = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormDataInterface>({
     title: "",
     price: "",
     description: "",
-    file: "",
+    file: null,
     published: false,
   })
 
@@ -27,8 +27,15 @@ const ProductForm: FunctionComponent<Props> = () => {
 
     e.preventDefault()
 
+    const fd = new FormData()
+
+    fd.append("file", formData.file as File, "file")
+    fd.set("description", formData.description)
+    fd.set("title", formData.title)
+    fd.set("price", formData.price)
+
     try {
-      createProduct(formData)
+      createProduct(fd)
     } catch (error) {
       console.log(error)
     }
@@ -49,7 +56,13 @@ const ProductForm: FunctionComponent<Props> = () => {
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, file: e.target.value })
+    const files = e.target.files
+    console.log(files)
+
+    if (files) {
+      console.log()
+      setFormData({ ...formData, file: Array.from(files)[0] })
+    }
   }
 
   const handleClearButtonClick = () => {
@@ -57,7 +70,7 @@ const ProductForm: FunctionComponent<Props> = () => {
       title: "",
       description: "",
       price: "",
-      file: "",
+      file: null,
       published: false,
     })
   }
@@ -160,7 +173,6 @@ const ProductForm: FunctionComponent<Props> = () => {
                 name="photo"
                 onChange={handleFileInput}
                 type="file"
-                value={formData.file}
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900
                            shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400

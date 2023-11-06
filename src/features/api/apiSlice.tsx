@@ -6,7 +6,6 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000/api/",
     prepareHeaders: (headers, { getState }) => {
-      headers.set("Content-Type", "aplications/json")
       headers.set("Accept", "aplications/json")
       const token = (getState() as RootState).auth.token
       if (token) {
@@ -21,11 +20,10 @@ export const api = createApi({
         return {
           url: "products",
           method: "POST",
-          body: JSON.stringify(product),
+          body: product,
         }
       },
     }),
-
     updateProduct: builder.mutation({
       query: (product) => {
         return {
@@ -35,7 +33,6 @@ export const api = createApi({
         }
       },
     }),
-
     deleteProduct: builder.mutation({
       query: (productID) => {
         return {
@@ -45,7 +42,6 @@ export const api = createApi({
         }
       },
     }),
-
     protected: builder.mutation<{ message: string }, void>({
       query: () => "protected",
     }),
