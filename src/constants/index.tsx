@@ -1,31 +1,40 @@
 import { DashBoardLogo, Customer, Logout, Shop, Edit, Delete } from "../assets"
 import { ProductPopoverItems } from "../components/Popover"
 
-export type Navlinks = Array<{ text: string; icon: string; to: string }>
+export type SidebarItem = Array<{
+  text: string
+  icon: string
+  to: string
+  type: "button" | "link"
+}>
 
-export const UpperNavlinks: Navlinks = [
+export const LinksSidebar: SidebarItem = [
   {
     text: "Dashboard",
     icon: DashBoardLogo,
     to: "/dashboard",
+    type: "link",
   },
   {
     text: "Customer",
     icon: Customer,
     to: "/customer",
+    type: "link",
   },
   {
     text: "Products",
     icon: Shop,
     to: "/products",
+    type: "link",
   },
 ]
 
-export const BottomNavlinks: Navlinks = [
+export const ButtonsSidebar: SidebarItem = [
   {
     text: "Logout",
     icon: Logout,
-    to: "/logout",
+    to: "",
+    type: "button",
   },
 ]
 

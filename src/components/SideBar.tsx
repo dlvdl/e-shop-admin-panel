@@ -1,7 +1,11 @@
 import { FunctionComponent } from "react"
-import { useNavigate } from "react-router-dom"
-import { UpperNavlinks, BottomNavlinks, Navlinks } from "../constants"
+import { ButtonsSidebar, LinksSidebar, SidebarItem } from "../constants"
 import { Logo, Shape } from "../assets/"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+
+import { AppDispatch } from "../app/store"
+import { logout } from "../features/auth/authSlice"
 
 interface Props {}
 
@@ -9,12 +13,19 @@ interface SideBarItemProps {
   text: string
   icon: string
   to: string
+  type: "link" | "button"
 }
 
-const renderLinks = (data: Navlinks) => {
+const render = (data: SidebarItem) => {
   return data.map((link, i) => {
     return (
-      <SideBarItem key={i} text={link.text} icon={link.icon} to={link.to} />
+      <SideBarItem
+        key={i}
+        text={link.text}
+        icon={link.icon}
+        to={link.to}
+        type={link.type}
+      />
     )
   })
 }
@@ -35,10 +46,10 @@ const Sidebar: FunctionComponent<Props> = () => {
       </div>
       <div className="flex flex-col justify-between h-full">
         <div className="flex flex-col items-center gap-4">
-          {renderLinks(UpperNavlinks)}
+          {render(LinksSidebar)}
         </div>
         <div className=" flex flex-col items-center gap-4">
-          {renderLinks(BottomNavlinks)}
+          {render(ButtonsSidebar)}
         </div>
       </div>
     </aside>
@@ -46,11 +57,15 @@ const Sidebar: FunctionComponent<Props> = () => {
 }
 
 const SideBarItem: FunctionComponent<SideBarItemProps> = (props) => {
-  const { text, icon, to } = props
+  const { text, icon, to, type } = props
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
+
   return (
     <button
-      onClick={() => navigate(to)}
+      onClick={() => {
+        type !== "button" ? navigate(to) : dispatch(logout())
+      }}
       className="flex items-center hover:bg-custom-blue-100 px-3 py-4 w-full rounded-xl gap-3 transition-all"
     >
       <img src={icon} />

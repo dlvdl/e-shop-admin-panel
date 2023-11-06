@@ -1,10 +1,9 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { login } from "../features/auth/authActions"
+import { useLoginMutation } from "../features/api/apiSlice"
 import { AppDispatch } from "../app/store"
-
-// import axiosClient from "../axios-client"
+import { setCredentials } from "../features/auth/authSlice"
 
 interface Props {
   title: string
@@ -15,6 +14,7 @@ const Auth: FunctionComponent<Props> = ({ title, type }) => {
   const emailRef = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState("")
   const [pwd, setPwd] = useState("")
+  const [login] = useLoginMutation()
 
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -27,7 +27,9 @@ const Auth: FunctionComponent<Props> = ({ title, type }) => {
     e.preventDefault()
 
     try {
-      dispatch(login({ email, password: pwd }))
+      // dispatch(login({ email, password: pwd }))
+      const data = await login({ email: email, password: pwd }).unwrap()
+      dispatch(setCredentials(data))
       setEmail("")
       setPwd("")
       navigate("/dashboard")

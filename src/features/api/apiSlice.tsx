@@ -14,7 +14,27 @@ export const api = createApi({
       return headers
     },
   }),
+
   endpoints: (builder) => ({
+    login: builder.mutation({
+      query: (credentials) => {
+        return {
+          url: "login",
+          method: "POST",
+          body: { ...credentials },
+        }
+      },
+    }),
+
+    logout: builder.query({
+      query: () => {
+        return {
+          url: "logut",
+          method: "POST",
+        }
+      },
+    }),
+
     getProducts: builder.query({
       query: () => {
         return {
@@ -23,6 +43,7 @@ export const api = createApi({
         }
       },
     }),
+
     createProduct: builder.mutation({
       query: (product) => {
         return {
@@ -32,6 +53,7 @@ export const api = createApi({
         }
       },
     }),
+
     updateProduct: builder.mutation({
       query: (product) => {
         return {
@@ -41,6 +63,7 @@ export const api = createApi({
         }
       },
     }),
+
     deleteProduct: builder.mutation({
       query: (productID) => {
         return {
@@ -57,6 +80,8 @@ export const api = createApi({
 })
 
 export const {
+  useLoginMutation,
+  useLogoutQuery,
   useProtectedMutation,
   useCreateProductMutation,
   useGetProductsQuery,

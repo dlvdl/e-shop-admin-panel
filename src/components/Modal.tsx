@@ -20,7 +20,7 @@ const Modal: FunctionComponent<Props> = ({ open, onClose, children }) => {
         onClick={(e) => {
           e.stopPropagation()
         }}
-        className={`bg-white p-4 transition-all relative rounded-md   ${
+        className={`bg-white p-4 transition-all relative rounded-md    ${
           open ? "scale-100 opacity-100" : "scale-125 opacity-0"
         }`}
       >
