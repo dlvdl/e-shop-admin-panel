@@ -15,6 +15,14 @@ export const api = createApi({
     },
   }),
   endpoints: (builder) => ({
+    getProducts: builder.query({
+      query: () => {
+        return {
+          url: "products",
+          method: "GET",
+        }
+      },
+    }),
     createProduct: builder.mutation({
       query: (product) => {
         return {
@@ -48,4 +56,8 @@ export const api = createApi({
   }),
 })
 
-export const { useProtectedMutation, useCreateProductMutation } = api
+export const {
+  useProtectedMutation,
+  useCreateProductMutation,
+  useGetProductsQuery,
+} = api

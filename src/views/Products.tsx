@@ -2,47 +2,31 @@ import { FunctionComponent } from "react"
 import { Order, Actions, Add } from "../assets"
 import Modal from "../components/Modal"
 import ProductForm from "../components/ProductForm"
-import { IphoneMock, Iphone15Mock } from "../assets"
+// import { IphoneMock, Iphone15Mock } from "../assets"
 import { CustomPopover } from "../components/Popover"
 import { ProductPopOverItems } from "../constants"
 import { setOpenModal, selectOpenModal } from "../features/ui/uiSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { useGetProductsQuery } from "../features/api/apiSlice"
 
 interface Props {}
 
 interface Product {
   id: string
   title: string
-  image: string
+  image_url: string
   price: string
   lastUpdated: string
 }
 
 interface TableItemProps extends Product {}
 
-const mockData: Array<Product> = [
-  {
-    id: "1",
-    title: "Iphone 11 XS",
-    image: IphoneMock,
-    price: "1000$",
-    lastUpdated: "02/03/2022",
-  },
-  {
-    id: "2",
-    title: "Iphone 11 XS",
-    image: Iphone15Mock,
-    price: "1200$",
-    lastUpdated: "02/03/2022",
-  },
-]
-
 const render = (data: Array<Product>) => {
-  return data.map(({ id, image, lastUpdated, price, title }) => {
+  return data.map(({ id, image_url, lastUpdated, price, title }) => {
     return (
       <TableItem
         id={id}
-        image={image}
+        image_url={image_url}
         lastUpdated={lastUpdated}
         price={price}
         title={title}
@@ -53,6 +37,7 @@ const render = (data: Array<Product>) => {
 
 const Products: FunctionComponent<Props> = () => {
   const openModal: boolean = useAppSelector(selectOpenModal)
+
   const dispatch = useAppDispatch()
 
   return (
@@ -83,6 +68,8 @@ const Products: FunctionComponent<Props> = () => {
 }
 
 const Table: FunctionComponent<Props> = () => {
+  const { data, isLoading } = useGetProductsQuery("")
+
   return (
     <div className="bg-custom-black-200 p-4 rounded-2xl">
       <div className="flex justify-between mb-4 text-white ">
@@ -139,7 +126,7 @@ const Table: FunctionComponent<Props> = () => {
             <th className="first:rounded-tl-xl last:rounded-tr-xl ">actions</th>
           </tr>
         </thead>
-        <tbody className="text-white">{render(mockData)}</tbody>
+        <tbody className="text-white">{!isLoading && render(data.data)}</tbody>
       </table>
     </div>
   )
@@ -147,7 +134,7 @@ const Table: FunctionComponent<Props> = () => {
 
 const TableItem: FunctionComponent<TableItemProps> = ({
   id,
-  image,
+  image_url,
   lastUpdated,
   price,
   title,
@@ -156,7 +143,7 @@ const TableItem: FunctionComponent<TableItemProps> = ({
     <tr className="[&>*]:px-6 [&>*]:py-4">
       <td className="id">{id}</td>
       <td className="image w-11 h-11">
-        <img className="" src={image} alt="product image" />
+        <img className="" src={image_url} alt="product image" />
       </td>
       <td className="title">{title}</td>
       <td className="price">{price}</td>
