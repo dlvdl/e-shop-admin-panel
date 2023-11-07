@@ -1,9 +1,10 @@
 import { Popover } from "@headlessui/react"
 import { FunctionComponent } from "react"
 import { useAppDispatch } from "../app/hooks"
-import { setOpenModal } from "../features/ui/uiSlice"
+import { setOpenModal, setProductFormType } from "../features/ui/uiSlice"
 
 export type ProductPopoverItems = Array<{
+  id: string
   title: string
   icon: string
   type: "update" | "delete"
@@ -37,6 +38,7 @@ const render = (data: ProductPopoverItems) => {
 }
 
 export const CustomPopover: FunctionComponent<CustomPopoverProps> = ({
+  id,
   title,
   productPopoverItems,
   icon,
@@ -59,6 +61,7 @@ export const CustomPopover: FunctionComponent<CustomPopoverProps> = ({
 }
 
 const CustomPopoverItem: FunctionComponent<CustomdPopoverItemProps> = ({
+  id,
   type,
   title,
   icon,
@@ -71,6 +74,7 @@ const CustomPopoverItem: FunctionComponent<CustomdPopoverItemProps> = ({
         type === "update"
           ? () => {
               dispatch(setOpenModal())
+              dispatch(setProductFormType("update"))
             }
           : action
       }

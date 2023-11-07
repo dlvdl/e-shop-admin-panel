@@ -1,8 +1,7 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
 import { useLoginMutation } from "../features/api/apiSlice"
-import { AppDispatch } from "../app/store"
+import { useAppDispatch } from "../app/hooks"
 import { setCredentials } from "../features/auth/authSlice"
 import LoadingSpinner from "../components/Spinner"
 
@@ -16,8 +15,7 @@ const Auth: FunctionComponent<Props> = ({ title, type }) => {
   const [email, setEmail] = useState("")
   const [pwd, setPwd] = useState("")
   const [login, { isLoading }] = useLoginMutation()
-
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {

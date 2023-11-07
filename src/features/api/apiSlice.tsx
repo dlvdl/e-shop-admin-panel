@@ -29,7 +29,7 @@ export const api = createApi({
     logout: builder.query({
       query: () => {
         return {
-          url: "logut",
+          url: "logout",
           method: "POST",
         }
       },
@@ -85,4 +85,6 @@ export const {
   useProtectedMutation,
   useCreateProductMutation,
   useGetProductsQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } = api

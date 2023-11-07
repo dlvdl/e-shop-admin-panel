@@ -1,41 +1,39 @@
 import React, { FunctionComponent, useState } from "react"
-import { useCreateProductMutation } from "../features/api/apiSlice"
+import { useRef } from "react"
 
-interface Props {}
+interface Props {
+  title: string
+  onSave: <T>(arg: T) => void
+}
 
 export interface FormDataInterface {
   title: string | ""
   price: string | ""
   description: string | ""
-  file: File | null
+  file: File | ""
   published: boolean
 }
 
-const ProductForm: FunctionComponent<Props> = () => {
+const ProductForm: FunctionComponent<Props> = ({ onSave, title }) => {
   const [formData, setFormData] = useState<FormDataInterface>({
     title: "",
     price: "",
     description: "",
-    file: null,
+    file: "",
     published: false,
   })
-
-  const [createProduct] = useCreateProductMutation()
+  const fileRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    // for test purpose
-
     e.preventDefault()
-
     const fd = new FormData()
-
     fd.append("file", formData.file as File, "file")
     fd.set("description", formData.description)
     fd.set("title", formData.title)
     fd.set("price", formData.price)
 
     try {
-      createProduct(fd)
+      onSave(fd)
     } catch (error) {
       console.log(error)
     }
@@ -57,10 +55,8 @@ const ProductForm: FunctionComponent<Props> = () => {
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    console.log(files)
 
     if (files) {
-      console.log()
       setFormData({ ...formData, file: Array.from(files)[0] })
     }
   }
@@ -70,16 +66,20 @@ const ProductForm: FunctionComponent<Props> = () => {
       title: "",
       description: "",
       price: "",
-      file: null,
+      file: "",
       published: false,
     })
+
+    if (fileRef.current) {
+      fileRef.current.value = ""
+    }
   }
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Create new product
+          {title}
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -172,6 +172,7 @@ const ProductForm: FunctionComponent<Props> = () => {
                 id="photo"
                 name="photo"
                 onChange={handleFileInput}
+                ref={fileRef}
                 type="file"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900

@@ -2,12 +2,20 @@ import { FunctionComponent } from "react"
 import { Order, Actions, Add } from "../assets"
 import Modal from "../components/Modal"
 import ProductForm from "../components/ProductForm"
-// import { IphoneMock, Iphone15Mock } from "../assets"
 import { CustomPopover } from "../components/Popover"
 import { ProductPopOverItems } from "../constants"
-import { setOpenModal, selectOpenModal } from "../features/ui/uiSlice"
+import {
+  setOpenModal,
+  selectOpenModal,
+  selectProductFormType,
+  setProductFormType,
+} from "../features/ui/uiSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { useGetProductsQuery } from "../features/api/apiSlice"
+import {
+  useGetProductsQuery,
+  useUpdateProductMutation,
+} from "../features/api/apiSlice"
+import { useCreateProductMutation } from "../features/api/apiSlice"
 
 interface Props {}
 
@@ -20,6 +28,13 @@ interface Product {
 }
 
 interface TableItemProps extends Product {}
+
+// type FormStrategies = {
+//   [type: ProductFormType]: {
+//     title: ""
+//     action: () => void
+//   }
+// }
 
 const render = (data: Array<Product>) => {
   return data.map(({ id, image_url, lastUpdated, price, title }) => {
@@ -36,9 +51,18 @@ const render = (data: Array<Product>) => {
 }
 
 const Products: FunctionComponent<Props> = () => {
+  const [createProduct] = useCreateProductMutation()
+  const [updateProduct] = useUpdateProductMutation()
   const openModal: boolean = useAppSelector(selectOpenModal)
-
+  const typeOfFormStrategy = useAppSelector(selectProductFormType)
   const dispatch = useAppDispatch()
+
+  const strategies = {
+    create: { title: "Create Product", action: createProduct },
+    update: { title: "Update Product", action: updateProduct },
+  }
+
+  const currentStrategy = strategies[typeOfFormStrategy]
 
   return (
     <div>
@@ -48,6 +72,7 @@ const Products: FunctionComponent<Props> = () => {
           type="button"
           onClick={() => {
             dispatch(setOpenModal())
+            dispatch(setProductFormType("create"))
           }}
           className="flex items-center rounded-full justify-center aspect-square bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
@@ -60,7 +85,10 @@ const Products: FunctionComponent<Props> = () => {
           dispatch(setOpenModal())
         }}
       >
-        <ProductForm />
+        <ProductForm
+          title={currentStrategy.title}
+          onSave={currentStrategy.action}
+        />
       </Modal>
       <Table />
     </div>
@@ -151,6 +179,7 @@ const TableItem: FunctionComponent<TableItemProps> = ({
       <td className="lastUpdated">{lastUpdated}</td>
       <td className="actions">
         <CustomPopover
+          id={id}
           icon={Actions}
           productPopoverItems={ProductPopOverItems}
           title={null}
