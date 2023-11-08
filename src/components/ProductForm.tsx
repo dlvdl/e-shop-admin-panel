@@ -1,20 +1,30 @@
-import React, { FunctionComponent, useState } from "react"
+import React, { FunctionComponent, useEffect, useState } from "react"
+import {
+  useCreateProductMutation,
+  useGetProductQuery,
+  useUpdateProductMutation,
+} from "../features/api/apiSlice"
 import { useRef } from "react"
+import { useParams } from "react-router-dom"
+import { useAppDispatch } from "../app/hooks"
+import { setNeedRefetch } from "../features/ui/uiSlice"
+export type FormStrategyType = "create" | "update"
 
 interface Props {
   title: string
-  onSave: <T>(arg: T) => void
+  type: FormStrategyType
+  // onSave: <T>(arg: T) => void
 }
 
 export interface FormDataInterface {
-  title: string | ""
-  price: string | ""
-  description: string | ""
-  file: File | ""
+  title: string
+  price: string
+  description: string
+  file: File | string
   published: boolean
 }
 
-const ProductForm: FunctionComponent<Props> = ({ onSave, title }) => {
+const ProductForm: FunctionComponent<Props> = ({ title, type }) => {
   const [formData, setFormData] = useState<FormDataInterface>({
     title: "",
     price: "",
@@ -23,6 +33,18 @@ const ProductForm: FunctionComponent<Props> = ({ onSave, title }) => {
     published: false,
   })
   const fileRef = useRef<HTMLInputElement>(null)
+  const [createProduct] = useCreateProductMutation()
+  const [updateProduct] = useUpdateProductMutation()
+  const { id } = useParams()
+  const { data, isLoading } = useGetProductQuery(id, { skip: !id })
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (type === "update" && !isLoading) {
+      const { title, description, price } = data
+      setFormData({ title, description, file: "", price, published: false })
+    }
+  }, [data, isLoading, type])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -33,7 +55,15 @@ const ProductForm: FunctionComponent<Props> = ({ onSave, title }) => {
     fd.set("price", formData.price)
 
     try {
-      onSave(fd)
+      if (type === "create") {
+        createProduct(fd)
+      }
+
+      if (type === "update") {
+        updateProduct({ product: fd, productID: id })
+      }
+
+      dispatch(setNeedRefetch())
     } catch (error) {
       console.log(error)
     }

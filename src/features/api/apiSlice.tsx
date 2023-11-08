@@ -15,6 +15,8 @@ export const api = createApi({
     },
   }),
 
+  tagTypes: ["Products"],
+
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => {
@@ -42,6 +44,7 @@ export const api = createApi({
           method: "GET",
         }
       },
+      providesTags: ["Products"],
     }),
 
     createProduct: builder.mutation({
@@ -52,26 +55,37 @@ export const api = createApi({
           body: product,
         }
       },
+      invalidatesTags: ["Products"],
+    }),
+
+    getProduct: builder.query({
+      query: (productID) => {
+        return {
+          url: `products/${productID}`,
+          method: "GET",
+        }
+      },
     }),
 
     updateProduct: builder.mutation({
-      query: (product) => {
+      query: ({ product, productID }) => {
         return {
-          url: "products",
+          url: `products/${productID}`,
           method: "PATH",
-          body: JSON.stringify(product),
+          body: product,
         }
       },
+      invalidatesTags: ["Products"],
     }),
 
     deleteProduct: builder.mutation({
       query: (productID) => {
         return {
-          url: "products",
+          url: `products/${productID}`,
           method: "DELETE",
-          body: JSON.stringify({ id: productID }),
         }
       },
+      invalidatesTags: ["Products"],
     }),
     protected: builder.mutation<{ message: string }, void>({
       query: () => "protected",
@@ -87,4 +101,5 @@ export const {
   useGetProductsQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetProductQuery,
 } = api

@@ -1,26 +1,16 @@
 import { FunctionComponent } from "react"
 import { Order, Actions, Add } from "../assets"
-import Modal from "../components/Modal"
-import ProductForm from "../components/ProductForm"
 import { CustomPopover } from "../components/Popover"
-import { ProductPopOverItems } from "../constants"
-import {
-  setOpenModal,
-  selectOpenModal,
-  selectProductFormType,
-  setProductFormType,
-} from "../features/ui/uiSlice"
-import { useAppDispatch, useAppSelector } from "../app/hooks"
-import {
-  useGetProductsQuery,
-  useUpdateProductMutation,
-} from "../features/api/apiSlice"
-import { useCreateProductMutation } from "../features/api/apiSlice"
+import { Edit, Delete } from "../assets"
+import { useGetProductsQuery } from "../features/api/apiSlice"
+import { Outlet, useNavigate } from "react-router-dom"
+import { useAppSelector } from "../app/hooks"
+import { selectNeedRefetch } from "../features/ui/uiSlice"
 
 interface Props {}
 
 interface Product {
-  id: string
+  id: number
   title: string
   image_url: string
   price: string
@@ -28,13 +18,6 @@ interface Product {
 }
 
 interface TableItemProps extends Product {}
-
-// type FormStrategies = {
-//   [type: ProductFormType]: {
-//     title: ""
-//     action: () => void
-//   }
-// }
 
 const render = (data: Array<Product>) => {
   return data.map(({ id, image_url, lastUpdated, price, title }) => {
@@ -51,18 +34,7 @@ const render = (data: Array<Product>) => {
 }
 
 const Products: FunctionComponent<Props> = () => {
-  const [createProduct] = useCreateProductMutation()
-  const [updateProduct] = useUpdateProductMutation()
-  const openModal: boolean = useAppSelector(selectOpenModal)
-  const typeOfFormStrategy = useAppSelector(selectProductFormType)
-  const dispatch = useAppDispatch()
-
-  const strategies = {
-    create: { title: "Create Product", action: createProduct },
-    update: { title: "Update Product", action: updateProduct },
-  }
-
-  const currentStrategy = strategies[typeOfFormStrategy]
+  const navigate = useNavigate()
 
   return (
     <div>
@@ -71,32 +43,22 @@ const Products: FunctionComponent<Props> = () => {
         <button
           type="button"
           onClick={() => {
-            dispatch(setOpenModal())
-            dispatch(setProductFormType("create"))
+            navigate("/products/new")
           }}
           className="flex items-center rounded-full justify-center aspect-square bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           <img src={Add} alt="#" />
         </button>
       </div>
-      <Modal
-        open={openModal}
-        onClose={() => {
-          dispatch(setOpenModal())
-        }}
-      >
-        <ProductForm
-          title={currentStrategy.title}
-          onSave={currentStrategy.action}
-        />
-      </Modal>
+      <Outlet />
       <Table />
     </div>
   )
 }
 
 const Table: FunctionComponent<Props> = () => {
-  const { data, isLoading } = useGetProductsQuery("")
+  const needRefetch = useAppSelector(selectNeedRefetch)
+  const { data, isLoading } = useGetProductsQuery(needRefetch)
 
   return (
     <div className="bg-custom-black-200 p-4 rounded-2xl">
@@ -167,6 +129,7 @@ const TableItem: FunctionComponent<TableItemProps> = ({
   price,
   title,
 }) => {
+  const navigate = useNavigate()
   return (
     <tr className="[&>*]:px-6 [&>*]:py-4">
       <td className="id">{id}</td>
@@ -178,12 +141,28 @@ const TableItem: FunctionComponent<TableItemProps> = ({
       <td></td>
       <td className="lastUpdated">{lastUpdated}</td>
       <td className="actions">
-        <CustomPopover
-          id={id}
-          icon={Actions}
-          productPopoverItems={ProductPopOverItems}
-          title={null}
-        />
+        <CustomPopover icon={Actions} title={null}>
+          <div className="grid bg-custom-black-100 p-4 rounded-md gap-4">
+            <button
+              onClick={() => {
+                navigate(`/products/${id}`)
+              }}
+              className="flex items-center justify-between gap-3 hover:bg-custom-blue-100 transition-all p-2 rounded-xl"
+            >
+              Edit
+              <img className="w-5 h-5" src={Edit} alt="edit" />
+            </button>
+            <button
+              onClick={() => {
+                navigate(`/products/delete/${id}`)
+              }}
+              className="flex items-center justify-between gap-3 hover:bg-custom-blue-100 transition-all p-2 rounded-xl"
+            >
+              Delete
+              <img className="w-5 h-5" src={Delete} alt="edit" />
+            </button>
+          </div>
+        </CustomPopover>
       </td>
     </tr>
   )
