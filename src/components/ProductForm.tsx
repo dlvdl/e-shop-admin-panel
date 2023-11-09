@@ -8,12 +8,13 @@ import { useRef } from "react"
 import { useParams } from "react-router-dom"
 import { useAppDispatch } from "../app/hooks"
 import { setNeedRefetch } from "../features/ui/uiSlice"
+import LoadingSpinner from "./Spinner"
+
 export type FormStrategyType = "create" | "update"
 
 interface Props {
   title: string
   type: FormStrategyType
-  // onSave: <T>(arg: T) => void
 }
 
 export interface FormDataInterface {
@@ -33,18 +34,25 @@ const ProductForm: FunctionComponent<Props> = ({ title, type }) => {
     published: false,
   })
   const fileRef = useRef<HTMLInputElement>(null)
-  const [createProduct] = useCreateProductMutation()
-  const [updateProduct] = useUpdateProductMutation()
+  const [createProduct, { isLoading: createProductLoading }] =
+    useCreateProductMutation()
+  const [updateProduct, { isLoading: updateProductLoading }] =
+    useUpdateProductMutation()
   const { id } = useParams()
-  const { data, isLoading } = useGetProductQuery(id, { skip: !id })
+  const { data, isLoading: productLoading } = useGetProductQuery(id, {
+    skip: !id,
+  })
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (type === "update" && !isLoading) {
-      const { title, description, price } = data
-      setFormData({ title, description, file: "", price, published: false })
+    if (type === "update" && !productLoading) {
+      if (data) {
+        const { title, description, price } = data
+        setFormData({ title, description, file: "", price, published: false })
+      }
+      return
     }
-  }, [data, isLoading, type])
+  }, [productLoading, data, type])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -231,6 +239,11 @@ const ProductForm: FunctionComponent<Props> = ({ title, type }) => {
             >
               Clear
             </button>
+          </div>
+          <div className="flex justify-center">
+            {(productLoading ||
+              updateProductLoading ||
+              createProductLoading) && <LoadingSpinner />}
           </div>
         </form>
       </div>
