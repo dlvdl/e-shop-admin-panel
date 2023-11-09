@@ -65,13 +65,14 @@ export const api = createApi({
           method: "GET",
         }
       },
+      providesTags: ["Products"],
     }),
 
     updateProduct: builder.mutation({
       query: ({ product, productID }) => {
         return {
-          url: `products/${productID}`,
-          method: "PATH",
+          url: `products/${productID}?_method=PATCH`,
+          method: "POST",
           body: product,
         }
       },
