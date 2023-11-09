@@ -47,6 +47,26 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
 
+    getProductsWithFilter: builder.query({
+      query: (arg: {
+        order: "desc" | "asc"
+        search: string
+        per_page: number
+      }) => {
+        const { order, per_page, search } = arg
+        return {
+          url: "products",
+          method: "GET",
+          params: {
+            perp_page: per_page,
+            search,
+            sort_direction: order,
+          },
+        }
+      },
+      providesTags: ["Products"],
+    }),
+
     createProduct: builder.mutation({
       query: (product) => {
         return {
@@ -103,4 +123,5 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useGetProductQuery,
+  useGetProductsWithFilterQuery,
 } = api

@@ -1,11 +1,11 @@
-import { FunctionComponent } from "react"
+import { FunctionComponent, useState } from "react"
 import { Order, Actions, Add } from "../assets"
 import { CustomPopover } from "../components/Popover"
 import { Edit, Delete } from "../assets"
-import { useGetProductsQuery } from "../features/api/apiSlice"
+import { useGetProductsWithFilterQuery } from "../features/api/apiSlice"
 import { Outlet, useNavigate } from "react-router-dom"
-import { useAppSelector } from "../app/hooks"
-import { selectNeedRefetch } from "../features/ui/uiSlice"
+// import { useAppSelector } from "../app/hooks"
+// import { selectNeedRefetch } from "../features/ui/uiSlice"
 
 interface Props {}
 
@@ -14,18 +14,18 @@ interface Product {
   title: string
   image_url: string
   price: string
-  lastUpdated: string
+  updated_at: string
 }
 
 interface TableItemProps extends Product {}
 
 const render = (data: Array<Product>) => {
-  return data.map(({ id, image_url, lastUpdated, price, title }) => {
+  return data.map(({ id, image_url, updated_at, price, title }) => {
     return (
       <TableItem
         id={id}
         image_url={image_url}
-        lastUpdated={lastUpdated}
+        updated_at={updated_at}
         price={price}
         title={title}
       />
@@ -42,6 +42,7 @@ const Products: FunctionComponent<Props> = () => {
         <h2 className="text-white font-bold text-2xl">Products</h2>
         <button
           type="button"
+          title="Add product"
           onClick={() => {
             navigate("/products/new")
           }}
@@ -57,8 +58,34 @@ const Products: FunctionComponent<Props> = () => {
 }
 
 const Table: FunctionComponent<Props> = () => {
-  const needRefetch = useAppSelector(selectNeedRefetch)
-  const { data, isLoading } = useGetProductsQuery(needRefetch)
+  // const needRefetch = useAppSelector(selectNeedRefetch)
+  // const { data, isLoading } = useGetProductsQuery(needRefetch)
+  const [queryObj, setQueryObj] = useState<{
+    order: "desc" | "asc"
+    search: string
+    per_page: number
+  }>({
+    order: "asc",
+    search: "",
+    per_page: 5,
+  })
+
+  const { data, isLoading } = useGetProductsWithFilterQuery(queryObj)
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQueryObj({ ...queryObj, search: e.target.value })
+  }
+
+  const handleOrderButtonClick = () => {
+    setQueryObj({
+      ...queryObj,
+      order: queryObj.order === "asc" ? "desc" : "asc",
+    })
+  }
+
+  const handlePerPageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQueryObj({ ...queryObj, per_page: +e.target.value })
+  }
 
   return (
     <div className="bg-custom-black-200 p-4 rounded-2xl">
@@ -71,6 +98,7 @@ const Table: FunctionComponent<Props> = () => {
             id="quantity"
             name="quantity"
             type="number"
+            onChange={handlePerPageInput}
             placeholder="Type to quontity per page"
             required
             className="font-lato block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -78,6 +106,13 @@ const Table: FunctionComponent<Props> = () => {
           <div className="flex items-center w-full">
             <p>Found 6 products</p>
           </div>
+          <button
+            onClick={handleOrderButtonClick}
+            title="Order by price"
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            <img className="w-[18px] h-[18px]" src={Order} alt="#" />
+          </button>
         </div>
         <div className="flex items-center">
           <div>
@@ -85,6 +120,7 @@ const Table: FunctionComponent<Props> = () => {
               id="search"
               name="searh"
               type="text"
+              onChange={handleSearchInput}
               placeholder="Type to search product"
               className="font-lato block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -105,11 +141,7 @@ const Table: FunctionComponent<Props> = () => {
             <th className="first:rounded-tl-xl last:rounded-tr-xl capitalize">
               price
             </th>
-            <th className="first:rounded-tl-xl last:rounded-tr-xl capitalize">
-              <button>
-                <img className="w-[15px] h-[15px]" src={Order} alt="#" />
-              </button>
-            </th>
+
             <th className="first:rounded-tl-xl last:rounded-tr-xl capitalize">
               last updated at
             </th>
@@ -125,7 +157,7 @@ const Table: FunctionComponent<Props> = () => {
 const TableItem: FunctionComponent<TableItemProps> = ({
   id,
   image_url,
-  lastUpdated,
+  updated_at,
   price,
   title,
 }) => {
@@ -138,8 +170,8 @@ const TableItem: FunctionComponent<TableItemProps> = ({
       </td>
       <td className="title">{title}</td>
       <td className="price">{price}</td>
-      <td></td>
-      <td className="lastUpdated">{lastUpdated}</td>
+
+      <td className="lastUpdated">{updated_at}</td>
       <td className="actions">
         <CustomPopover icon={Actions} title={null}>
           <div className="grid bg-custom-black-100 p-4 rounded-md gap-4">
