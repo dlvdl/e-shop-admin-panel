@@ -51,7 +51,7 @@ const Pagination: FunctionComponent<Props> = (props) => {
     <ul className="flex gap-5 w-full justify-center items-center">
       <li>
         <button
-          className="border-solid border-2 rounded-full p-3 flex justify-center items-center h-8 w-8 hover:bg-violet-300 hover:text-white transition-colors disabled:hover:bg-transparent disabled:text-gray-400"
+          className="text-white border-solid border-2 rounded-full p-3 flex justify-center items-center h-8 w-8 hover:bg-violet-300 hover:text-white transition-colors disabled:hover:bg-transparent disabled:text-gray-400"
           disabled={currentPage == 1}
           onClick={onPrevious}
         >
@@ -61,9 +61,9 @@ const Pagination: FunctionComponent<Props> = (props) => {
       {paginationRange?.map((pageNumber) => {
         return (
           <PaginationItem
-            classname={`border-solid border-2 rounded-full p-3 cursor-pointer flex justify-center items-center h-8 w-8 hover:bg-violet-300 transition-colors ${
+            classname={`border-solid text-white border-2 rounded-full p-3 cursor-pointer flex justify-center items-center h-8 w-8 hover:bg-violet-300 transition-colors ${
               pageNumber === currentPage
-                ? "bg-purple text-white hover:bg-violet-600 scale-105"
+                ? "bg-custom-blue-100 text-white hover:bg-violet-600 scale-105"
                 : ""
             }`}
             divider={pageNumber === "..."}
@@ -78,7 +78,7 @@ const Pagination: FunctionComponent<Props> = (props) => {
         <button
           disabled={currentPage === count}
           onClick={onNext}
-          className="border-solid border-2 rounded-full p-3 flex justify-center items-center h-8 w-8 hover:bg-violet-300 hover:text-white transition-colors disabled:hover:bg-transparent disabled:text-gray-400"
+          className="text-white border-solid border-2 rounded-full p-3 flex justify-center items-center h-8 w-8 hover:bg-violet-300 hover:text-white transition-colors disabled:hover:bg-transparent disabled:text-gray-400"
         >
           {">"}
         </button>

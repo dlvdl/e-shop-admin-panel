@@ -113,7 +113,7 @@ const Table: FunctionComponent<Props> = () => {
         </div>
       </div>
 
-      <table className="min-w-full text-left table-fixed border-custom-black-100">
+      <table className="min-w-full text-left table-fixed border-custom-black-100 mb-4">
         <thead className="  bg-custom-black-100 rounded-md text-custom-white-100">
           <tr className="capitalize [&>*]:px-6 [&>*]:py-4">
             <th className="first:rounded-tl-xl last:rounded-tr-xl ">ID</th>
