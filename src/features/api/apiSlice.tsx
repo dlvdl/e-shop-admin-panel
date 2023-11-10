@@ -52,8 +52,9 @@ export const api = createApi({
         order: "desc" | "asc"
         search: string
         per_page: number
+        page: number
       }) => {
-        const { order, per_page, search } = arg
+        const { order, per_page, search, page } = arg
         return {
           url: "products",
           method: "GET",
@@ -61,6 +62,7 @@ export const api = createApi({
             perp_page: per_page,
             search,
             sort_direction: order,
+            page: page,
           },
         }
       },

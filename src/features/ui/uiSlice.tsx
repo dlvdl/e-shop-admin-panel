@@ -7,6 +7,7 @@ export interface InitialState {
   openModal: boolean
   productFormType: ProductFormType
   needRefetch: boolean
+  currentProductPage: number
 }
 
 export const uiSlice = createSlice({
@@ -27,11 +28,19 @@ export const uiSlice = createSlice({
     setNeedRefetch: (state) => {
       state.needRefetch = !state.needRefetch
     },
+
+    setProductNumberPage: (state, { payload }) => {
+      state.currentProductPage = payload
+    },
   },
 })
 
-export const { setOpenModal, setProductFormType, setNeedRefetch } =
-  uiSlice.actions
+export const {
+  setOpenModal,
+  setProductFormType,
+  setNeedRefetch,
+  setProductNumberPage,
+} = uiSlice.actions
 export default uiSlice.reducer
 
 export const selectOpenModal = (state: RootState) => state.ui.openModal
@@ -39,3 +48,5 @@ export const selectProductFormType = (state: RootState) => {
   return state.ui.productFormType
 }
 export const selectNeedRefetch = (state: RootState) => state.ui.needRefetch
+export const selectCurentProductPage = (state: RootState) =>
+  state.ui.currentProductPage
