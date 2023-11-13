@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
+import { TransitionGroup, CSSTransition } from "react-transition-group"
+import { Outlet, useLocation, useNavigate, Routes } from "react-router-dom"
 
-import { Outlet, useNavigate } from "react-router-dom"
 import Table from "../components/Table"
 import { Add } from "../assets"
 
@@ -8,6 +9,7 @@ interface Props {}
 
 const Products: FunctionComponent<Props> = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   return (
     <div>
@@ -24,7 +26,11 @@ const Products: FunctionComponent<Props> = () => {
           <img src={Add} alt="#" />
         </button>
       </div>
-      <Outlet />
+      <TransitionGroup>
+        <CSSTransition timeout={300} key={location.pathname} classNames="fade">
+          <Outlet />
+        </CSSTransition>
+      </TransitionGroup>
       <Table />
     </div>
   )

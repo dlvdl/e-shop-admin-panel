@@ -14,7 +14,7 @@ const Modal: FunctionComponent<Props> = ({ open, to, children }) => {
       onClick={() => {
         navigate(to)
       }}
-      className={`fixed inset-0 flex justify-center items-center transition-colors  ${
+      className={`fixed inset-0 flex justify-center items-center transition-colors z-20  ${
         open ? "visible bg-black/20" : "invisible"
       }`}
     >

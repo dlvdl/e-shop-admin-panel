@@ -48,7 +48,7 @@ const Pagination: FunctionComponent<Props> = (props) => {
   }
 
   return (
-    <ul className="flex gap-5 w-full justify-center items-center">
+    <ul className="flex gap-5 w-full justify-center items-center relative z-0">
       <li>
         <button
           className="text-white border-solid border-2 rounded-full p-3 flex justify-center items-center h-8 w-8 hover:bg-violet-300 hover:text-white transition-colors disabled:hover:bg-transparent disabled:text-gray-400"
